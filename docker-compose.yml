@@ -17,3 +17,13 @@ services:
     ports:
       - 51820:51820/udp
     restart: unless-stopped
+  management:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vpn-management
+    ports:
+      - 5010:5000
+    volumes:
+      - ./config:/config
+    restart: unless-stopped
