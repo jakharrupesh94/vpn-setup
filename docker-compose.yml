@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  wireguard:
+    build:
+      context: .
+      dockerfile: Dockerfile.wireguard
+    container_name: wireguard
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - SERVERURL=213.200.202.246 # your server's public IP
+      - SERVERPORT=51820
+      - PEERS=1 # number of peers (clients)
+      - PEERDNS=auto
+    volumes:
+      - ./config:/config
+    ports:
+      - 51820:51820/udp
+    restart: unless-stopped
+
+  management:
+    build:
+      context: .
+      dockerfile: Dockerfile.management
+    container_name: vpn-management
+    ports:
+      - 5010:5000
+    volumes:
+      - ./config:/config
+    restart: unless-stopped
